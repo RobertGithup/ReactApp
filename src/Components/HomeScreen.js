@@ -7,34 +7,10 @@ import {
   Dimensions,
   Image,
 } from "react-native";
-import HomeItems from "./HomeItem";
+
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Component } from "react";
-
-const foods = [
-  {
-    key: 0,
-    title: "NORTH INDIANS",
-    text: "109 Places",
-    // image: require("../../../assests/home/img_food5.jpg"),
-    backgroundColor: "#59b2ab",
-  },
-  {
-    key: 1,
-    title: "DESSERT",
-    text: "145 Places",
-    //image: require("../../../assests/home/img_food3.jpg"),
-    backgroundColor: "#febe29",
-  },
-  {
-    key: 2,
-    title: "STARTERS",
-    text: "127 Places",
-    //image: require("../../../assests/home/img_food4.jpg"),
-    backgroundColor: "#22bcb5",
-  },
-];
 
 const { height, width } = Dimensions.get("window");
 
@@ -60,7 +36,7 @@ class Home extends Component {
                 style={{ paddingLeft: 10, color: "black" }}
               />
             </TouchableOpacity>
-            <Text style={styles.headerText}>Popular Cusines</Text>
+            <Text style={styles.headerText}>Home</Text>
           </View>
         </View>
       </View>
@@ -72,24 +48,15 @@ class Home extends Component {
   }
 }
 
-const renderCustomItems = (item) => {
-  return (
-    <TouchableOpacity onPress={this.sendToFoodListScreen.bind(this)}>
-      <HomeItems item={item} nav={navigation} />
-    </TouchableOpacity>
-  );
-};
-
 const styles = {
   container: {
     height: height,
     width: width,
-    backgroundColor: "#f7f7f7",
+    backgroundColor: "white",
   },
   header: {
-    marginTop: 60,
     flexDirection: "row",
-    alignItems: "center",
+    backgroundColor: "#861F41",
   },
   headerText: {
     fontSize: 20,

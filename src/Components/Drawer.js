@@ -17,19 +17,18 @@ const arrMenu = [
   { id: 0, name: "Home", icon: "home-outline", navScreen: "HomeScreen" },
   {
     id: 1,
-    name: "Favourite",
-    icon: "heart-multiple-outline",
-    navScreen: "FavouriteScreen",
+    name: "GRN",
+    icon: "comment-text-multiple",
+    navScreen: "Grpo",
   },
   {
     id: 2,
-    name: "Messages",
+    name: "Delivery",
     icon: "comment-text-multiple",
     navScreen: "MessagesScreen",
   },
-  { id: 3, name: "My Walet", icon: "wallet", navScreen: "MyWaletScreen" },
-  { id: 4, name: "Help", icon: "help", navScreen: "HelpScreen" },
-  { id: 5, name: "Log out", icon: "logout", navScreen: "LoginScreen" },
+
+  { id: 3, name: "Log out", icon: "logout", navScreen: "Login" },
 ];
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -47,30 +46,7 @@ class DrawerMenu extends React.Component {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar backgroundColor="blue" barStyle="light-content" />
-        <View style={styles.headerContainer}>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ marginLeft: 15 }}>
-              <Thumbnail circle source={{ uri: uri }} />
-            </View>
-
-            <Text
-              style={{
-                color: "#fff",
-                fontSize: 22,
-                fontWeight: "600",
-                paddingLeft: 10,
-              }}
-            >
-              Halli
-            </Text>
-          </View>
-        </View>
+        <View style={styles.headerContainer}></View>
         <View style={styles.menuContainer}>{this.renderFlatList()}</View>
         <View
           style={[
@@ -130,7 +106,7 @@ export default DrawerMenu;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "rgb(7,27,52)",
+    backgroundColor: "#861F41",
   },
   headerContainer: {
     flex: 0.9,

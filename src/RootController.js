@@ -3,6 +3,8 @@ import { createDrawerNavigator } from "react-navigation-drawer";
 import { createStackNavigator } from "react-navigation-stack";
 import { Dimensions } from "react-native";
 import HomeScreen from "./Components/HomeScreen";
+import Login from "./Components/Login";
+import UserCreation from "./Components/UserCreation";
 import Grpo from "./Components/Grpo";
 
 import DrawerMenu from "./Components/Drawer";
@@ -19,7 +21,7 @@ const HomeNavigator = createStackNavigator(
   }
 );
 
-const FavouriteNavigator = createStackNavigator(
+const GrpoNavigator = createStackNavigator(
   {
     Grpo,
   },
@@ -28,18 +30,39 @@ const FavouriteNavigator = createStackNavigator(
     headerMode: "none",
   }
 );
+const LoginNavigator = createStackNavigator(
+  {
+    Login,
+  },
+  {
+    initialRouteName: "Login",
+    headerMode: "none",
+  }
+);
+const UserCreationNavigator = createStackNavigator(
+  {
+    UserCreation,
+  },
+  {
+    initialRouteName: "UserCreation",
+    headerMode: "none",
+  }
+);
 
 const DrawerNavigator = createDrawerNavigator(
   {
     HomeScreen: HomeNavigator,
-
-    FavouriteScreen: FavouriteNavigator,
+    Grpo: GrpoNavigator,
+    Login: LoginNavigator,
+    UserCreation: UserCreationNavigator,
   },
   {
     navigationOptions: {
       headerMode: "none",
     },
-    initialRouteName: "HomeScreen",
+
+    initialRouteName: "Login",
+
     drawerBackgroundColor: "red",
     contentComponent: DrawerMenu,
     drawerLockMode: "locked-closed",

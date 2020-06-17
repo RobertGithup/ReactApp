@@ -7,7 +7,7 @@ import RootController from "./src/RootController";
 
 class DemoLogin extends Component {
   render() {
-    return <Login />;
+    return <RootController />;
   }
 }
 
