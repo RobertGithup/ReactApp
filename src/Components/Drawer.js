@@ -11,14 +11,19 @@ import {
   View,
   FlatList,
 } from "react-native";
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+//import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+
+import { BsBoxArrowInDownRight } from "react-icons/bs";
+import { BsBoxArrowInDownLeft } from "react-icons/bs";
+import { AiOutlineLogout } from "react-icons/ai";
+import { AiOutlineHome } from "react-icons/ai";
 
 const arrMenu = [
   { id: 0, name: "Home", icon: "home-outline", navScreen: "HomeScreen" },
   {
     id: 1,
     name: "GRN",
-    icon: "comment-text-multiple",
+    icon: "BsBoxArrowInDownRight",
     navScreen: "Grpo",
   },
   {
@@ -45,8 +50,6 @@ class DrawerMenu extends React.Component {
 
     return (
       <SafeAreaView style={styles.container}>
-        <StatusBar backgroundColor="blue" barStyle="light-content" />
-        <View style={styles.headerContainer}></View>
         <View style={styles.menuContainer}>{this.renderFlatList()}</View>
         <View
           style={[
@@ -66,33 +69,48 @@ class DrawerMenu extends React.Component {
 
   renderFlatList() {
     return (
-      <FlatList
-        scrollEnabled={screenHeight >= 667 ? false : true}
-        data={arrMenu}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <TouchableOpacity
-            onPress={() => this.navigateToScreen(item.navScreen)}
-          >
-            <View
-              style={{
-                height: 55,
-                flex: 1,
-                flexDirection: "row",
-                alignItems: "center",
-                justifyContent: "flex-start",
-              }}
-            >
-              <MaterialCommunityIcons
-                name={item.icon}
-                size={35}
-                style={{ paddingLeft: 20, color: "#fff" }}
-              />
-              <Text style={styles.menuText}>{item.name}</Text>
-            </View>
-          </TouchableOpacity>
-        )}
-      />
+      <View>
+        <TouchableOpacity onPress={() => this.navigateToScreen("HomeScreen")}>
+          <View style={styles.ListBtn}>
+            <AiOutlineHome
+              size={35}
+              style={{ paddingLeft: 20, color: "#fff" }}
+            />
+
+            <Text style={styles.menuText}>Home</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.navigateToScreen("Grpo")}>
+          <View style={styles.ListBtn}>
+            <BsBoxArrowInDownRight
+              size={35}
+              style={{ paddingLeft: 20, color: "#fff" }}
+            />
+
+            <Text style={styles.menuText}>GRN</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.navigateToScreen(item.navScreen)}>
+          <View style={styles.ListBtn}>
+            <BsBoxArrowInDownLeft
+              size={35}
+              style={{ paddingLeft: 20, color: "#fff" }}
+            />
+
+            <Text style={styles.menuText}>STN</Text>
+          </View>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => this.navigateToScreen("Login")}>
+          <View style={styles.ListBtn}>
+            <AiOutlineLogout
+              size={35}
+              style={{ paddingLeft: 20, color: "#fff" }}
+            />
+
+            <Text style={styles.menuText}>Logout</Text>
+          </View>
+        </TouchableOpacity>
+      </View>
     );
   }
 
@@ -108,12 +126,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#861F41",
   },
+  ListBtn: {
+    height: 55,
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginBottom: 10,
+  },
   headerContainer: {
     flex: 0.9,
     justifyContent: "center",
   },
   menuContainer: {
-    flex: 3,
+    marginTop: 60,
     justifyContent: "center",
   },
   headerText: {

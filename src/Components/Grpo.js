@@ -89,11 +89,31 @@ class Grpo extends Component {
             </View>
 
             <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Invoice Date"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ warehouse: text })}
+              <DatePicker
+                style={{ width: 140 }}
+                date={this.state.date}
+                mode="date"
+                placeholder="select date"
+                format="YYYY-MM-DD"
+                minDate="2016-05-01"
+                maxDate="2016-06-01"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                customStyles={{
+                  dateIcon: {
+                    position: "absolute",
+                    left: 0,
+                    top: 4,
+                    marginLeft: 0,
+                  },
+                  dateInput: {
+                    marginLeft: 36,
+                  },
+                  // ... You can check the source to find the other keys.
+                }}
+                onDateChange={(date) => {
+                  this.setState({ date: date });
+                }}
               />
             </View>
           </View>
@@ -234,6 +254,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
     paddingLeft: 10,
+    color: "white",
   },
   label: {
     color: "white",
@@ -250,7 +271,8 @@ const styles = StyleSheet.create({
   inputContainerView: {
     width: "40%",
     borderWidth: 1,
-    borderRadius: 25,
+    borderRadius: 10,
+    marginLeft: 5,
     height: 50,
     marginBottom: 20,
     justifyContent: "center",

@@ -1,4 +1,5 @@
 import React, { component } from "react";
+import useState from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +9,7 @@ import {
   Dimensions,
   CheckBox,
   KeyboardAvoidingView,
+  Switch,
 } from "react-native";
 import { Component } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -22,9 +24,14 @@ class UserCreation extends Component {
   onMenuPress() {
     this.props.navigation.openDrawer();
   }
+  _onToggleSwitch = () =>
+    this.setState((state) => ({ isSwitchOn: !state.isSwitchOn }));
+
   state = {
     behavior: "position",
+    isSwitchOn: false,
   };
+
   render() {
     return (
       <View style={styles.container}>
@@ -88,29 +95,35 @@ class UserCreation extends Component {
             />
           </View>
         </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            // value={isSelected}
-            //  onValueChange={setSelection}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>PO</Text>
-        </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            // value={isSelected}
-            //  onValueChange={setSelection}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>ST</Text>
-        </View>
-        <View style={styles.checkboxContainer}>
-          <CheckBox
-            // value={isSelected}
-            //  onValueChange={setSelection}
-            style={styles.checkbox}
-          />
-          <Text style={styles.label}>Sync</Text>
+        <View style={styles.checkboxRowContainer}>
+          <View style={styles.checkboxContainer}>
+            <Switch
+              value={this.state.isSwitchOn}
+              onValueChange={this._onToggleSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "#861F41",
+              }}
+            />
+            <Text style={styles.label}>ST</Text>
+          </View>
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              // value={isSelected}
+              //  onValueChange={setSelection}
+              style={styles.checkbox}
+            />
+            <Text style={styles.label}>ST</Text>
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <CheckBox
+              // value={isSelected}
+              //  onValueChange={setSelection}
+              style={styles.checkbox}
+            />
+            <Text style={styles.label}>Sync</Text>
+          </View>
         </View>
         <View style={styles.bottomcontainer}>
           <TouchableOpacity
@@ -146,6 +159,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
   },
+  checkboxRowContainer: { flexDirection: "row" },
   checkboxContainer: {
     flexDirection: "row",
     marginBottom: 20,
@@ -161,6 +175,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#861F41",
   },
   headerText: {
+    color: "white",
     fontSize: 20,
     fontWeight: "500",
     paddingLeft: 10,
