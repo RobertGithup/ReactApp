@@ -24,12 +24,19 @@ class UserCreation extends Component {
   onMenuPress() {
     this.props.navigation.openDrawer();
   }
-  _onToggleSwitch = () =>
-    this.setState((state) => ({ isSwitchOn: !state.isSwitchOn }));
+  _onUserSwitch = () =>
+    this.setState((state) => ({ isUserOn: !state.isUserOn }));
+  _onSTSwitch = () => this.setState((state) => ({ isStOn: !state.isStOn }));
+  _onPOSwitch = () => this.setState((state) => ({ isPoOn: !state.isPoOn }));
+  _onSynchSwitch = () =>
+    this.setState((state) => ({ isSyncOn: !state.isSyncOn }));
 
   state = {
     behavior: "position",
-    isSwitchOn: false,
+    isUserOn: false,
+    isPoOn: false,
+    isStOn: false,
+    isSyncOn: false,
   };
 
   render() {
@@ -47,10 +54,14 @@ class UserCreation extends Component {
         </View>
         <View style={styles.bodycontainer}>
           <View style={styles.checkboxContainer}>
-            <CheckBox
-              // value={isSelected}
-              //  onValueChange={setSelection}
-              style={styles.checkbox}
+            <Switch
+              value={this.state.isUserOn}
+              onValueChange={this._onUserSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbTintColor="#861F41"
             />
             <Text style={styles.label}>Lock User</Text>
           </View>
@@ -98,29 +109,38 @@ class UserCreation extends Component {
         <View style={styles.checkboxRowContainer}>
           <View style={styles.checkboxContainer}>
             <Switch
-              value={this.state.isSwitchOn}
-              onValueChange={this._onToggleSwitch}
+              value={this.state.isPoOn}
+              onValueChange={this._onPOSwitch}
               trackColor={{
                 true: "#861F41",
-                false: "#861F41",
+                false: "gray",
               }}
+              thumbTintColor="#861F41"
             />
-            <Text style={styles.label}>ST</Text>
+            <Text style={styles.label}>PO</Text>
           </View>
           <View style={styles.checkboxContainer}>
-            <CheckBox
-              // value={isSelected}
-              //  onValueChange={setSelection}
-              style={styles.checkbox}
+            <Switch
+              value={this.state.isStOn}
+              onValueChange={this._onSTSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbTintColor="#861F41"
             />
             <Text style={styles.label}>ST</Text>
           </View>
 
           <View style={styles.checkboxContainer}>
-            <CheckBox
-              // value={isSelected}
-              //  onValueChange={setSelection}
-              style={styles.checkbox}
+            <Switch
+              value={this.state.isSyncOn}
+              onValueChange={this._onSynchSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbTintColor="#861F41"
             />
             <Text style={styles.label}>Sync</Text>
           </View>
