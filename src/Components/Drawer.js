@@ -13,28 +13,27 @@ import {
 } from "react-native";
 
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import FeatherIcons from "react-native-vector-icons/Feather";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
 const arrMenu = [
-  { id: 0, name: "Home", icon: "home-outline", navScreen: "HomeScreen" },
+  { id: 0, name: "Home", icon: "home", navScreen: "HomeScreen" },
   {
     id: 1,
-    name: "Grpo",
-    icon: "heart-multiple-outline",
-    navScreen: "FavouriteScreen",
+
     name: "GRN",
-    icon: "comment-text-multiple",
+    icon: "arrow-down-right",
     navScreen: "Grpo",
   },
   {
     id: 2,
-    name: "Messages",
+
     name: "Delivery",
-    icon: "comment-text-multiple",
+    icon: "arrow-down-left",
     navScreen: "MessagesScreen",
   },
 
-  { id: 3, name: "Log out", icon: "logout", navScreen: "Login" },
+  { id: 3, name: "Log out", icon: "log-out", navScreen: "Login" },
 ];
 
 class DrawerMenu extends React.Component {
@@ -85,7 +84,7 @@ class DrawerMenu extends React.Component {
                 justifyContent: "flex-start",
               }}
             >
-              <MaterialCommunityIcons
+              <FeatherIcons
                 name={item.icon}
                 size={35}
                 style={{ paddingLeft: 20, color: "#fff" }}

@@ -53,18 +53,6 @@ class UserCreation extends Component {
           <Text style={styles.headerText}>User Creation</Text>
         </View>
         <View style={styles.bodycontainer}>
-          <View style={styles.checkboxContainer}>
-            <Switch
-              value={this.state.isUserOn}
-              onValueChange={this._onUserSwitch}
-              trackColor={{
-                true: "#861F41",
-                false: "gray",
-              }}
-              thumbTintColor="#861F41"
-            />
-            <Text style={styles.label}>Lock User</Text>
-          </View>
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
@@ -115,7 +103,7 @@ class UserCreation extends Component {
                 true: "#861F41",
                 false: "gray",
               }}
-              thumbTintColor="#861F41"
+              thumbColor="#861F41"
             />
             <Text style={styles.label}>PO</Text>
           </View>
@@ -127,22 +115,22 @@ class UserCreation extends Component {
                 true: "#861F41",
                 false: "gray",
               }}
-              thumbTintColor="#861F41"
+              thumbColor="#861F41"
             />
             <Text style={styles.label}>ST</Text>
           </View>
 
           <View style={styles.checkboxContainer}>
             <Switch
-              value={this.state.isSyncOn}
-              onValueChange={this._onSynchSwitch}
+              value={this.state.isUserOn}
+              onValueChange={this._onUserSwitch}
               trackColor={{
                 true: "#861F41",
                 false: "gray",
               }}
-              thumbTintColor="#861F41"
+              thumbColor="#861F41"
             />
-            <Text style={styles.label}>Sync</Text>
+            <Text style={styles.label}>Lock User</Text>
           </View>
         </View>
         <View style={styles.bottomcontainer}>
@@ -170,11 +158,10 @@ const styles = StyleSheet.create({
   },
   bodycontainer: {
     marginTop: 20,
-    alignItems: "center",
   },
   bottomcontainer: {
     flexDirection: "row",
-    //position: "absolute",
+    marginLeft: 10,
     bottom: 0,
     left: 0,
     width: "100%",
@@ -183,7 +170,7 @@ const styles = StyleSheet.create({
   checkboxContainer: {
     flexDirection: "row",
     marginBottom: 20,
-    marginLeft: 50,
+    marginLeft: 20,
     alignItems: "center",
   },
   checkbox: {
@@ -204,13 +191,14 @@ const styles = StyleSheet.create({
     color: "black",
   },
   inputView: {
-    width: "80%",
+    width: "90%",
     borderWidth: 1,
-    borderRadius: 10,
-    height: 50,
-    marginBottom: 20,
+    marginLeft: 20,
+    height: 30,
+    marginBottom: 10,
     justifyContent: "center",
     padding: 20,
+    borderColor: "#A9A9A9",
   },
   inputText: {
     height: 50,

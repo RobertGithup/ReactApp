@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     justifyContent: "center",
     padding: 20,
+    borderColor: "#A9A9A9",
   },
   inputText: {
     height: 50,

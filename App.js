@@ -4,6 +4,7 @@ import Login from "./src/Components/Login";
 import Home from "./src/Components/HomeScreen";
 
 import RootController from "./src/RootController";
+import Test from "./src/Test";
 
 class DemoLogin extends Component {
   render() {

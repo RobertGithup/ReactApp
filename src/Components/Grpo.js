@@ -7,6 +7,8 @@ import {
   TouchableOpacity,
   Dimensions,
   CheckBox,
+  FlatList,
+  ScrollView,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
 import {
@@ -20,8 +22,29 @@ import {
 } from "react-native-table-component";
 import { Component } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import AntIcons from "react-native-vector-icons/AntDesign";
+import MaterialIcons from "react-native-vector-icons/MaterialIcons";
 import Modal from "react-native-modal";
-const { height, width } = Dimensions.get("window");
+import StickyHeaderFooterScrollView from "react-native-sticky-header-footer-scroll-view";
+import Collapsible from "react-native-collapsible";
+
+const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
+const arrMenu = [
+  { id: 0, name: "Item1" },
+  {
+    id: 1,
+    name: "Item2",
+  },
+  {
+    id: 2,
+    name: "Item3",
+  },
+
+  { id: 3, name: "Item4" },
+  { id: 4, name: "Item5" },
+  { id: 5, name: "Item6" },
+  { id: 6, name: "Item7" },
+];
 
 class Grpo extends Component {
   onButtonPress = () => {
@@ -35,158 +58,179 @@ class Grpo extends Component {
     isModalVisible = true;
   }
   state = {
-    tableHead: ["Description", "PO Qty", "GRN Qty"],
-    tableData: [
-      ["1", "2", "3"],
-      ["a", "b", "c"],
-    ],
     date: "2016-05-15",
     isModalVisible: false,
+    status: false,
   };
+
   constructor(props) {
     super(props);
+  }
+  renderFlatList() {
+    return (
+      <View>
+        <FlatList
+          scrollEnabled={true}
+          scr
+          data={arrMenu}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <View style={styles.flatlistContainer}>
+              <View style={{ flexDirection: "row" }}>
+                <View>
+                  <Text style={styles.flatlisttext}>{item.name}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    flex: 1,
+                  }}
+                >
+                  <AntIcons
+                    name="scan1"
+                    style={{ marginRight: 10, marginTop: 5 }}
+                    size={25}
+                  />
+                </View>
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <View style={{ marginLeft: 10 }}>
+                  <Text>Receipt 0/5</Text>
+                </View>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    );
   }
 
   render() {
     const state = this.state;
+
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.onMenuPress()}>
-            <MaterialCommunityIcons
-              name="menu"
+      <StickyHeaderFooterScrollView
+        makeScrollable={true}
+        renderStickyHeader={() => (
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => this.onMenuPress()}>
+              <MaterialCommunityIcons
+                name="menu"
+                size={35}
+                style={{ paddingLeft: 10, color: "black" }}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>GRN</Text>
+          </View>
+        )}
+        renderStickyFooter={() => <View></View>}
+      >
+        <View style={styles.bodycontainer}>
+          <View style={{ flexDirection: "row" }}>
+            <View style={styles.singleinputViewIcon}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="PO Number"
+                placeholderTextColor="#003f5c"
+                onChangeText={(text) => this.setState({ email: text })}
+              />
+            </View>
+            <MaterialIcons
+              name="expand-more"
               size={35}
               style={{ paddingLeft: 10, color: "black" }}
+              status
+              onPress={() => this.setState({ status: !this.state.status })}
             />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>GRN</Text>
-        </View>
-        <View style={styles.bodycontainer}>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="PO Number"
-              placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ email: text })}
-            />
-          </View>
-          <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="Vendor Name"
-              placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ password: text })}
-            />
-          </View>
-          <View style={styles.textcontainer}>
-            <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Invoice No"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ warehouse: text })}
-              />
-            </View>
-
-            <View style={styles.inputContainerView}>
-              <DatePicker
-                style={{ width: 140 }}
-                date={this.state.date}
-                mode="date"
-                placeholder="select date"
-                format="YYYY-MM-DD"
-                minDate="2016-05-01"
-                maxDate="2016-06-01"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                customStyles={{
-                  dateIcon: {
-                    position: "absolute",
-                    left: 0,
-                    top: 4,
-                    marginLeft: 0,
-                  },
-                  dateInput: {
-                    marginLeft: 36,
-                  },
-                  // ... You can check the source to find the other keys.
-                }}
-                onDateChange={(date) => {
-                  this.setState({ date: date });
-                }}
-              />
-            </View>
-          </View>
-          <View style={styles.textcontainer}>
-            <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Vechicle No"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ warehouse: text })}
-              />
-            </View>
-            <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Location"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ IMEINo1: text })}
-              />
-            </View>
-          </View>
-          <View style={styles.textcontainer}>
-            <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Moment Type"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ warehouse: text })}
-              />
-            </View>
-            <View style={styles.inputContainerView}>
-              <TextInput
-                style={styles.inputText}
-                placeholder="Indicator"
-                placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ IMEINo1: text })}
-              />
-            </View>
+            {/* <TouchableOpacity
+              onPress={() => this.setState({ status: !this.state.status })}
+              style={{ width: 50, height: 20, backgroundColor: "red" }}
+            ></TouchableOpacity> */}
           </View>
 
+          <Collapsible collapsed={this.state.status}>
+            <View style={styles.doubleinputContainer}>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Vendor Name"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="GRN Date"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+            </View>
+
+            <View style={styles.doubleinputContainer}>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Invoice No"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Invoice Date"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+            </View>
+            <View style={styles.doubleinputContainer}>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Vechicle No"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Location"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ IMEINo1: text })}
+                />
+              </View>
+            </View>
+            <View style={styles.doubleinputContainer}>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Moment Type"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ warehouse: text })}
+                />
+              </View>
+              <View style={styles.doubleinputView}>
+                <TextInput
+                  style={styles.inputText}
+                  placeholder="Indicator"
+                  placeholderTextColor="#003f5c"
+                  onChangeText={(text) => this.setState({ IMEINo1: text })}
+                />
+              </View>
+            </View>
+          </Collapsible>
           <View style={styles.tablecontainer}>
-            <Table borderStyle={{ borderWidth: 2, borderColor: "#c8e1ff" }}>
-              <Row
-                data={state.tableHead}
-                style={styles.head}
-                textStyle={styles.text}
-              />
-              <Rows data={state.tableData} textStyle={styles.text} />
-            </Table>
+            <View style={styles.menuContainer}>{this.renderFlatList()}</View>
           </View>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={styles.ItemSelectionbtn}
-            onPress={this.onButtonPress}
-          >
-            <Text style={styles.loginText}>Item Select</Text>
-          </TouchableOpacity>
         </View>
         <View style={styles.bottomcontainer}>
-          {/* <TouchableOpacity
-            style={styles.loginBtn}
-            title="Show modal"
-            onPress={this.toggleModal}
-          />
-
-          <Modal isVisible={this.state.isModalVisible}>
-            <View style={{ flex: 1 }}>
-              <Text>Hello!</Text>
-
-              <TouchableOpacity title="Hide modal" onPress={this.toggleModal} />
-            </View>
-          </Modal> */}
           <TouchableOpacity
             style={styles.loginBtn}
             onPress={this.onButtonPress}
@@ -200,7 +244,7 @@ class Grpo extends Component {
             <Text style={styles.loginText}>Cancel</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </StickyHeaderFooterScrollView>
     );
   }
 }
@@ -209,15 +253,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "white",
   },
-
+  view: {
+    height: 50,
+    padding: 20,
+    justifyContent: "center",
+    backgroundColor: "#ffffff",
+  },
   bodycontainer: {
     marginTop: 20,
-    alignItems: "center",
+    // alignItems: "center",
   },
   bottomcontainer: {
     flexDirection: "row",
     position: "relative",
-    // justifyContent: "center",
+    marginLeft: 10,
     bottom: 0,
     left: 0,
     width: "100%",
@@ -229,9 +278,23 @@ const styles = StyleSheet.create({
     marginLeft: 50,
     alignItems: "center",
   },
-  textcontainer: {
+  flatlistContainer: {
+    marginBottom: 5,
+    marginTop: 5,
+    flex: 1,
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+  },
+  flatlisttext: {
+    marginTop: 5,
+    fontWeight: "bold",
+
+    color: "black",
+    paddingLeft: 10,
+  },
+  doubleinputContainer: {
     flexDirection: "row",
-    justifyContent: "center",
+    marginLeft: 10,
   },
   tablecontainer: {
     width: "90%",
@@ -256,27 +319,39 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: "white",
   },
+
   label: {
     color: "white",
   },
-  inputView: {
-    width: "80%",
+  singleinputView: {
+    width: "90%",
     borderWidth: 1,
-    borderRadius: 10,
-    height: 50,
-    marginBottom: 20,
+    marginLeft: 20,
+    height: 30,
+    marginBottom: 10,
     justifyContent: "center",
     padding: 20,
   },
-  inputContainerView: {
-    width: "40%",
+  singleinputViewIcon: {
+    width: "80%",
     borderWidth: 1,
-    borderRadius: 10,
-    marginLeft: 5,
-    height: 50,
-    marginBottom: 20,
+    marginLeft: 20,
+    height: 30,
+    marginBottom: 10,
     justifyContent: "center",
     padding: 20,
+    borderColor: "#A9A9A9",
+  },
+  doubleinputView: {
+    width: "45%",
+    borderWidth: 1,
+
+    marginLeft: 10,
+    height: 30,
+    marginBottom: 5,
+    justifyContent: "center",
+    padding: 20,
+    borderColor: "#A9A9A9",
   },
   inputText: {
     height: 50,
@@ -287,17 +362,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 11,
   },
-  ItemSelectionbtn: {
-    width: "30%",
-    backgroundColor: "#861F41",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-  },
+
   loginBtn: {
     width: "40%",
     backgroundColor: "#861F41",
@@ -308,6 +373,17 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 10,
+  },
+  Scan: {
+    width: 100,
+
+    borderRadius: 5,
+    height: 25,
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 5,
+
+    justifyContent: "flex-end",
   },
 });
 export default Grpo;
