@@ -15,10 +15,6 @@ import { Component } from "react";
 const { height, width } = Dimensions.get("window");
 
 class Home extends Component {
-  static navigationOptions = {
-    header: null,
-  };
-
   sendToFoodListScreen(index) {
     let food = foods[index];
     this.props.navigation.navigate("FoodList", { title: food.title });
@@ -33,7 +29,7 @@ class Home extends Component {
               <MaterialCommunityIcons
                 name="menu"
                 size={35}
-                style={{ paddingLeft: 10, color: "black" }}
+                style={{ paddingLeft: 10, color: "white" }}
               />
             </TouchableOpacity>
             <Text style={styles.headerText}>Home</Text>
@@ -57,11 +53,13 @@ const styles = {
   header: {
     flexDirection: "row",
     backgroundColor: "#861F41",
+    alignItems: "center",
   },
   headerText: {
     fontSize: 20,
     fontWeight: "500",
     paddingLeft: 10,
+    color: "white",
   },
 };
 

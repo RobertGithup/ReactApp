@@ -11,18 +11,49 @@ import { Component } from "react";
 import { Card } from "react-native-elements";
 class Login extends Component {
   onButtonPress = () => {
-    if (this.state.email == "") {
+    if (this.state.userName == "") {
       return alert("User Name shoule Not be empty");
     }
     if (this.state.password == "") {
       return alert("Password shoule Not be empty");
     }
 
-    this.props.navigation.navigate("UserCreation");
+    this.props.navigation.navigate("HomeScreen");
   };
   state = {
-    email: "",
+    userId: "",
+    userName: "",
     password: "",
+    data: "",
+  };
+  onButtonPress = () => {
+    fetch(
+      global.HttpLink +
+        "Master/ExsistingUser?UserName=" +
+        this.state.userName +
+        "&PassWord=" +
+        this.state.password,
+      {
+        method: "POST",
+      }
+    )
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          data: responseJson,
+        });
+        if (this.state.data.status == 1) {
+          this.setState({
+            userId: this.state.data.status,
+          });
+          this.props.navigation.navigate("HomeScreen");
+        } else {
+          return alert(this.state.data.message);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   render() {
     return (
@@ -36,7 +67,7 @@ class Login extends Component {
               style={styles.inputText}
               placeholder="UserName..."
               placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ email: text })}
+              onChangeText={(text) => this.setState({ userName: text })}
             />
           </View>
           <View style={styles.inputView}>

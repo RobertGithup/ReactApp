@@ -12,7 +12,6 @@ import {
   FlatList,
 } from "react-native";
 
-import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import FeatherIcons from "react-native-vector-icons/Feather";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -30,10 +29,11 @@ const arrMenu = [
 
     name: "Delivery",
     icon: "arrow-down-left",
-    navScreen: "MessagesScreen",
+    navScreen: "Delivery",
   },
 
-  { id: 3, name: "Log out", icon: "log-out", navScreen: "Login" },
+  { id: 3, name: "User Creation", icon: "user", navScreen: "UserCreation" },
+  { id: 4, name: "Log out", icon: "log-out", navScreen: "Login" },
 ];
 
 class DrawerMenu extends React.Component {

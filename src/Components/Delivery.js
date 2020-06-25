@@ -8,12 +8,19 @@ import {
   Dimensions,
   CheckBox,
   FlatList,
-  Calendar,
-  Alert,
   ScrollView,
+  Calendar,
 } from "react-native";
 import DatePicker from "react-native-datepicker";
-
+import {
+  Table,
+  TableWrapper,
+  Row,
+  Rows,
+  Col,
+  Cols,
+  Cell,
+} from "react-native-table-component";
 import { Component } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import AntIcons from "react-native-vector-icons/AntDesign";
@@ -23,9 +30,24 @@ import StickyHeaderFooterScrollView from "react-native-sticky-header-footer-scro
 import Collapsible from "react-native-collapsible";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-arrItem = [];
+const arrMenu = [
+  { id: 0, name: "Item1" },
+  {
+    id: 1,
+    name: "Item2",
+  },
+  {
+    id: 2,
+    name: "Item3",
+  },
 
-class Grpo extends Component {
+  { id: 3, name: "Item4" },
+  { id: 4, name: "Item5" },
+  { id: 5, name: "Item6" },
+  { id: 6, name: "Item7" },
+];
+
+class Delivery extends Component {
   onButtonPress = () => {
     console.log("Button Clicked");
     this.props.navigation.navigate("HomeScreen");
@@ -36,59 +58,10 @@ class Grpo extends Component {
   toggleModal() {
     isModalVisible = true;
   }
-  PoSelection() {}
-
-  onAddItmes = () => {
-    fetch(
-      global.HttpLink +
-        "Transaction/GetPO?PONum=4500009770" +
-        this.state.PoNumber,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          data: responseJson,
-        });
-        return alert(this.state.data.PONum);
-        //  return alert(JSON.stringify(responseJson.get()));
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    this.setState((state) => {
-      const list = state.arrItem.push([2, "Item1"]);
-      return {
-        list,
-      };
-    });
-  };
-  onAddSerialNo = () => {
-    this.setState((state) => {
-      const list = state.arrSerial.push([2, this.state.serialNo]);
-
-      return {
-        list,
-      };
-    });
-  };
   state = {
     date: "2016-05-15",
     isModalVisible: false,
-    status: true,
-    modelItemDesc: "",
-    arrSerial: [],
-    serialNo: "",
-    arrItem: [],
-    PoNumber: "",
-    VendorName: "",
-    data: "",
+    Collapsestatus: true,
   };
 
   constructor(props) {
@@ -99,13 +72,14 @@ class Grpo extends Component {
       <View>
         <FlatList
           scrollEnabled={true}
-          data={this.state.arrItem}
-          keyExtractor={(item) => item[0]}
+          scr
+          data={arrMenu}
+          keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.flatlistContainer}>
               <View style={{ flexDirection: "row" }}>
                 <View>
-                  <Text style={styles.flatlisttext}>{item[1]}</Text>
+                  <Text style={styles.flatlisttext}>{item.name}</Text>
                 </View>
                 <View
                   style={{
@@ -116,12 +90,6 @@ class Grpo extends Component {
                 >
                   <AntIcons
                     name="scan1"
-                    onPress={() => {
-                      this.setState({
-                        isModalVisible: true,
-                        modelItemDesc: item[1],
-                      });
-                    }}
                     style={{ marginRight: 10, marginTop: 5 }}
                     size={25}
                   />
@@ -138,33 +106,7 @@ class Grpo extends Component {
       </View>
     );
   }
-  renderModelFlatList() {
-    return (
-      <View>
-        <FlatList
-          scrollEnabled={true}
-          data={this.state.arrSerial}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.modelflatlistContainer}>
-              <View style={{ flexDirection: "row" }}>
-                <View>
-                  <Text style={styles.flatlisttext}>{item[1]}</Text>
-                </View>
-                <View
-                  style={{
-                    flexDirection: "row",
-                    justifyContent: "flex-end",
-                    flex: 1,
-                  }}
-                ></View>
-              </View>
-            </View>
-          )}
-        />
-      </View>
-    );
-  }
+
   render() {
     const state = this.state;
 
@@ -180,101 +122,37 @@ class Grpo extends Component {
                 style={{ paddingLeft: 10, color: "white" }}
               />
             </TouchableOpacity>
-            <Text style={styles.headerText}>GRN</Text>
+            <Text style={styles.headerText}>Delivery</Text>
           </View>
         )}
         renderStickyFooter={() => <View></View>}
       >
         <View style={styles.bodycontainer}>
-          <Modal
-            animationType={"fade"}
-            transparent={true}
-            visible={this.state.isModalVisible}
-          >
-            <ScrollView
-              style={{ flex: 1 }}
-              scrollEnabled={true}
-              makeScrollable={true}
-              keyboardShouldPersistTaps="always"
-            >
-              <View style={styles.modal}>
-                <View style={styles.header}>
-                  <Text style={styles.modelheaderText}>Serial Number</Text>
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                  <TextInput
-                    value={this.state.modelItemDesc}
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "500",
-                      paddingLeft: 10,
-                      color: "black",
-                    }}
-                  ></TextInput>
-                </View>
-                <View style={styles.modelBodyContainer}>
-                  <View style={{ flexDirection: "row" }}>
-                    <View style={styles.singleinputViewIcon}>
-                      <TextInput
-                        style={styles.inputText}
-                        placeholder="Scan"
-                        placeholderTextColor="#003f5c"
-                        onChangeText={(text) =>
-                          this.setState({ serialNo: text })
-                        }
-                      />
-                    </View>
-                    <AntIcons
-                      name="scan1"
-                      onPress={this.onAddSerialNo}
-                      style={{ marginRight: 10, marginTop: 5 }}
-                      size={25}
-                    />
-                  </View>
-                  <View style={styles.menuContainer}>
-                    {this.renderModelFlatList()}
-                  </View>
-                  <TouchableOpacity
-                    style={styles.modelbutton}
-                    onPress={() => {
-                      this.setState({
-                        isModalVisible: !this.state.isModalVisible,
-                      });
-                    }}
-                  >
-                    <Text>OK</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </ScrollView>
-          </Modal>
-
           <View style={{ flexDirection: "row" }}>
             <View style={styles.singleinputViewIcon}>
               <TextInput
                 style={styles.inputText}
-                placeholder="PO Number"
+                placeholder="Deliver Number"
                 placeholderTextColor="#003f5c"
-                onChangeText={(text) => this.setState({ PoNumber: text })}
-                onSubmitEditing={() => this.onAddItmes()}
-                value={this.state.PoNumber}
+                onChangeText={(text) => this.setState({ email: text })}
               />
             </View>
             <MaterialIcons
               name="expand-more"
               size={35}
               style={{ paddingLeft: 10, color: "black" }}
-              status
-              onPress={() => this.setState({ status: !this.state.status })}
+              onPress={() =>
+                this.setState({ Collapsestatus: !this.state.Collapsestatus })
+              }
             />
           </View>
 
-          <Collapsible collapsed={this.state.status}>
+          <Collapsible collapsed={this.state.Collapsestatus}>
             <View style={styles.doubleinputContainer}>
               <View style={styles.doubleinputView}>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Vendor Name"
+                  placeholder="Transfer Number"
                   placeholderTextColor="#003f5c"
                   onChangeText={(text) => this.setState({ warehouse: text })}
                 />
@@ -283,32 +161,13 @@ class Grpo extends Component {
               <View style={styles.doubleinputView}>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Invoice Date"
+                  placeholder="Delivery Date"
                   placeholderTextColor="#003f5c"
                   onChangeText={(text) => this.setState({ warehouse: text })}
                 />
               </View>
             </View>
 
-            <View style={styles.doubleinputContainer}>
-              <View style={styles.doubleinputView}>
-                <TextInput
-                  style={styles.inputText}
-                  placeholder="Invoice No"
-                  placeholderTextColor="#003f5c"
-                  onChangeText={(text) => this.setState({ warehouse: text })}
-                />
-              </View>
-
-              <View style={styles.doubleinputView}>
-                <TextInput
-                  style={styles.inputText}
-                  placeholder="Invoice Date"
-                  placeholderTextColor="#003f5c"
-                  onChangeText={(text) => this.setState({ warehouse: text })}
-                />
-              </View>
-            </View>
             <View style={styles.doubleinputContainer}>
               <View style={styles.doubleinputView}>
                 <TextInput
@@ -401,24 +260,15 @@ const styles = StyleSheet.create({
   flatlistContainer: {
     marginBottom: 5,
     marginTop: 5,
+    flex: 1,
+    borderColor: "#A9A9A9",
 
-    flex: 1,
-    borderColor: "#A9A9A9",
-    borderBottomWidth: 1,
-  },
-  modelflatlistContainer: {
-    marginBottom: 5,
-    marginTop: 5,
-    marginLeft: 10,
-    marginRight: 10,
-    flex: 1,
-    borderColor: "#A9A9A9",
     borderBottomWidth: 1,
   },
   flatlisttext: {
     marginTop: 5,
-    marginLeft: 10,
     fontWeight: "bold",
+
     color: "black",
     paddingLeft: 10,
   },
@@ -449,12 +299,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     color: "white",
   },
-  modelheaderText: {
-    fontSize: 18,
-    fontWeight: "500",
-    paddingLeft: 10,
-    color: "white",
-  },
+
   label: {
     color: "white",
   },
@@ -466,7 +311,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     justifyContent: "center",
     padding: 20,
-    borderColor: "#A9A9A9",
   },
   singleinputViewIcon: {
     width: "80%",
@@ -521,29 +365,5 @@ const styles = StyleSheet.create({
 
     justifyContent: "flex-end",
   },
-  modal: {
-    backgroundColor: "white",
-    height: 500,
-    width: "80%",
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#A9A9A9",
-    marginTop: 80,
-    marginLeft: 40,
-  },
-  modelBodyContainer: {
-    marginTop: 10,
-  },
-  modelbutton: {
-    width: "40%",
-    backgroundColor: "#861F41",
-    borderRadius: 25,
-    height: 50,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 20,
-    marginBottom: 10,
-    marginLeft: 10,
-  },
 });
-export default Grpo;
+export default Delivery;

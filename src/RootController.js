@@ -6,6 +6,7 @@ import HomeScreen from "./Components/HomeScreen";
 import Login from "./Components/Login";
 import UserCreation from "./Components/UserCreation";
 import Grpo from "./Components/Grpo";
+import Delivery from "./Components/Delivery";
 
 import DrawerMenu from "./Components/Drawer";
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
@@ -30,6 +31,17 @@ const GrpoNavigator = createStackNavigator(
     headerMode: "none",
   }
 );
+
+const DeliveryNavigator = createStackNavigator(
+  {
+    Delivery,
+  },
+  {
+    initialRouteName: "Delivery",
+    headerMode: "none",
+  }
+);
+
 const LoginNavigator = createStackNavigator(
   {
     Login,
@@ -53,6 +65,7 @@ const DrawerNavigator = createDrawerNavigator(
   {
     HomeScreen: HomeNavigator,
     Grpo: GrpoNavigator,
+    Delivery: DeliveryNavigator,
     Login: LoginNavigator,
     UserCreation: UserCreationNavigator,
   },
