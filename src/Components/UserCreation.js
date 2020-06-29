@@ -222,7 +222,7 @@ class UserCreation extends Component {
           <View style={styles.inputView}>
             <TextInput
               style={styles.inputText}
-              placeholder="Warehouse"
+              placeholder="Branch"
               placeholderTextColor="#003f5c"
               onChangeText={(text) => this.setState({ warehouse: text })}
               value={this.state.warehouse}

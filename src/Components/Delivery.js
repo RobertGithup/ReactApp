@@ -152,7 +152,7 @@ class Delivery extends Component {
               <View style={styles.doubleinputView}>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Transfer Number"
+                  placeholder="Supplying Site"
                   placeholderTextColor="#003f5c"
                   onChangeText={(text) => this.setState({ warehouse: text })}
                 />

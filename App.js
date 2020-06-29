@@ -8,7 +8,7 @@ import Test from "./src/Test";
 
 class DemoLogin extends Component {
   render() {
-    return <RootController />;
+    return <Test />;
   }
 }
 

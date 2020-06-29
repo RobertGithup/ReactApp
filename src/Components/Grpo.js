@@ -23,7 +23,6 @@ import StickyHeaderFooterScrollView from "react-native-sticky-header-footer-scro
 import Collapsible from "react-native-collapsible";
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get("window");
-arrItem = [];
 
 class Grpo extends Component {
   onButtonPress = () => {
@@ -33,10 +32,16 @@ class Grpo extends Component {
   onMenuPress() {
     this.props.navigation.openDrawer();
   }
-  toggleModal() {
-    isModalVisible = true;
+  onItemScanClick(ItemNo) {
+    let filteredArray = this.state.arrSerialAll.filter(
+      (item) => item[1] == ItemNo
+    );
+    this.setState({
+      isModalVisible: true,
+      modelItemDesc: ItemNo,
+      arrSerial: filteredArray,
+    });
   }
-  PoSelection() {}
 
   onAddItmes = () => {
     fetch(
@@ -56,36 +61,76 @@ class Grpo extends Component {
         this.setState({
           data: responseJson,
         });
-        return alert(this.state.data.PONum);
-        //  return alert(JSON.stringify(responseJson.get()));
+        this.setState({
+          VendorName: this.state.data[0].VendorCode,
+          arrItem1: [],
+        });
+
+        this.state.data[0].item.map((item) => {
+          this.setState((state) => {
+            state.arrItem1.push([
+              this.state.arrItem1.length + 1,
+              item.ItemNo,
+              item.Qty,
+            ]);
+          });
+        });
+        this.setState({
+          arrItem: this.state.arrItem1,
+        });
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+  onSelectSerialNo = () => {
+    let filteredArray = this.state.arrSerial.filter(
+      (item) => item[2] == this.state.serialNo
+    );
+    if (filteredArray.length !== 0) {
+      return alert("Same Serial Number Exsists");
+    }
     this.setState((state) => {
-      const list = state.arrItem.push([2, "Item1"]);
+      const list = state.arrSerial.push([
+        this.state.arrSerial.length + 1,
+        this.state.modelItemDesc,
+        this.state.serialNo,
+      ]);
+      this.setState({
+        serialNo: "",
+      });
       return {
         list,
       };
     });
   };
   onAddSerialNo = () => {
-    this.setState((state) => {
-      const list = state.arrSerial.push([2, this.state.serialNo]);
-
-      return {
-        list,
-      };
+    this.setState({
+      isModalVisible: !this.state.isModalVisible,
     });
+    let filteredArray = this.state.arrSerialAll.filter(
+      (item) => item[1] !== this.state.modelItemDesc
+    );
+    let newArray = filteredArray.concat(this.state.arrSerial);
+
+    this.setState({ arrSerialAll: newArray });
   };
+  removeSerialNo(SerialNo) {
+    let filteredArray = this.state.arrSerial.filter(
+      (item) => item[2] !== SerialNo
+    );
+    this.setState({ arrSerial: filteredArray });
+  }
   state = {
     date: "2016-05-15",
     isModalVisible: false,
     status: true,
     modelItemDesc: "",
     arrSerial: [],
+    arrSerialAll: [],
     serialNo: "",
     arrItem: [],
+
     PoNumber: "",
     VendorName: "",
     data: "",
@@ -100,6 +145,7 @@ class Grpo extends Component {
         <FlatList
           scrollEnabled={true}
           data={this.state.arrItem}
+          extraData={this.state}
           keyExtractor={(item) => item[0]}
           renderItem={({ item }) => (
             <View style={styles.flatlistContainer}>
@@ -117,10 +163,7 @@ class Grpo extends Component {
                   <AntIcons
                     name="scan1"
                     onPress={() => {
-                      this.setState({
-                        isModalVisible: true,
-                        modelItemDesc: item[1],
-                      });
+                      this.onItemScanClick(item[1]);
                     }}
                     style={{ marginRight: 10, marginTop: 5 }}
                     size={25}
@@ -129,7 +172,7 @@ class Grpo extends Component {
               </View>
               <View style={{ flexDirection: "row" }}>
                 <View style={{ marginLeft: 10 }}>
-                  <Text>Receipt 0/5</Text>
+                  <Text>Receipt 0/{item[2]}</Text>
                 </View>
               </View>
             </View>
@@ -148,8 +191,17 @@ class Grpo extends Component {
           renderItem={({ item }) => (
             <View style={styles.modelflatlistContainer}>
               <View style={{ flexDirection: "row" }}>
+                <MaterialCommunityIcons
+                  name="delete"
+                  size={25}
+                  style={{ paddingLeft: 10, color: "black" }}
+                  onPress={() => {
+                    this.removeSerialNo(item[2]);
+                  }}
+                  // onPress={this.removeSerialNo(item[2])}
+                />
                 <View>
-                  <Text style={styles.flatlisttext}>{item[1]}</Text>
+                  <Text style={styles.flatlisttext}>{item[2]}</Text>
                 </View>
                 <View
                   style={{
@@ -191,62 +243,43 @@ class Grpo extends Component {
             transparent={true}
             visible={this.state.isModalVisible}
           >
-            <ScrollView
-              style={{ flex: 1 }}
-              scrollEnabled={true}
-              makeScrollable={true}
-              keyboardShouldPersistTaps="always"
-            >
-              <View style={styles.modal}>
-                <View style={styles.header}>
-                  <Text style={styles.modelheaderText}>Serial Number</Text>
-                </View>
-                <View style={{ marginLeft: 10 }}>
-                  <TextInput
-                    value={this.state.modelItemDesc}
-                    style={{
-                      fontSize: 18,
-                      fontWeight: "500",
-                      paddingLeft: 10,
-                      color: "black",
-                    }}
-                  ></TextInput>
-                </View>
-                <View style={styles.modelBodyContainer}>
-                  <View style={{ flexDirection: "row" }}>
-                    <View style={styles.singleinputViewIcon}>
-                      <TextInput
-                        style={styles.inputText}
-                        placeholder="Scan"
-                        placeholderTextColor="#003f5c"
-                        onChangeText={(text) =>
-                          this.setState({ serialNo: text })
-                        }
-                      />
-                    </View>
-                    <AntIcons
-                      name="scan1"
-                      onPress={this.onAddSerialNo}
-                      style={{ marginRight: 10, marginTop: 5 }}
-                      size={25}
-                    />
-                  </View>
-                  <View style={styles.menuContainer}>
-                    {this.renderModelFlatList()}
-                  </View>
-                  <TouchableOpacity
-                    style={styles.modelbutton}
-                    onPress={() => {
-                      this.setState({
-                        isModalVisible: !this.state.isModalVisible,
-                      });
-                    }}
-                  >
-                    <Text>OK</Text>
-                  </TouchableOpacity>
-                </View>
+            <View style={styles.modal}>
+              <View style={styles.header}>
+                <Text style={styles.modelheaderText}>Serial Number</Text>
               </View>
-            </ScrollView>
+              <View style={{ marginLeft: 10 }}>
+                <TextInput
+                  value={this.state.modelItemDesc}
+                  style={{
+                    fontSize: 18,
+                    fontWeight: "500",
+                    paddingLeft: 10,
+                    color: "black",
+                  }}
+                ></TextInput>
+              </View>
+              <View style={styles.modelBodyContainer}>
+                <View style={styles.singleinputViewIcon}>
+                  <TextInput
+                    style={styles.inputText}
+                    placeholder="Scan"
+                    placeholderTextColor="#003f5c"
+                    onChangeText={(text) => this.setState({ serialNo: text })}
+                    onSubmitEditing={() => this.onSelectSerialNo()}
+                    value={this.state.serialNo}
+                  />
+                </View>
+                <View style={styles.menuContainer}>
+                  {this.renderModelFlatList()}
+                </View>
+                <TouchableOpacity
+                  style={styles.modelbutton}
+                  onPress={() => this.onAddSerialNo()}
+                >
+                  <Text>OK</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
           </Modal>
 
           <View style={{ flexDirection: "row" }}>
@@ -270,20 +303,30 @@ class Grpo extends Component {
           </View>
 
           <Collapsible collapsed={this.state.status}>
+            <View style={styles.singleinputView}>
+              <TextInput
+                style={styles.inputText}
+                placeholder="Vendor Name"
+                placeholderTextColor="#003f5c"
+                onChangeText={(text) => this.setState({ warehouse: text })}
+                value={this.state.VendorName}
+              />
+            </View>
             <View style={styles.doubleinputContainer}>
               <View style={styles.doubleinputView}>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Vendor Name"
+                  placeholder="GIN No"
                   placeholderTextColor="#003f5c"
                   onChangeText={(text) => this.setState({ warehouse: text })}
+                  value={this.state.GinNo}
                 />
               </View>
 
               <View style={styles.doubleinputView}>
                 <TextInput
                   style={styles.inputText}
-                  placeholder="Invoice Date"
+                  placeholder="Posting Date"
                   placeholderTextColor="#003f5c"
                   onChangeText={(text) => this.setState({ warehouse: text })}
                 />
@@ -523,7 +566,7 @@ const styles = StyleSheet.create({
   },
   modal: {
     backgroundColor: "white",
-    height: 500,
+    height: screenHeight - 200,
     width: "80%",
     borderRadius: 10,
     borderWidth: 1,

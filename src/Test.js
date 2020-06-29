@@ -1,53 +1,21 @@
-import React, { Component } from "react";
-import { Text, View, StyleSheet, Image, Alert } from "react-native";
-import CollapseView from "react-native-collapse-view";
-import Collapsible from "react-native-collapsible";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { RNCamera } from "react-native-camera";
 
 class Test extends Component {
-  _renderView = (collapse) => {
-    return (
-      <View style={styles.view}>
-        <Text>Hai</Text>
-      </View>
-    );
-  };
-
-  _renderTensionView = (collapse) => {
-    return (
-      <View style={styles.view}>
-        <Text>With tension effect</Text>
-      </View>
-    );
-  };
-
-  _renderCollapseView = (collapse) => {
-    return (
-      <View style={styles.collapseView}>
-        <Text>
-          Lorem Ipsum is simply dummy text of the printing and typesetting
-        </Text>
-      </View>
-    );
-  };
-  state = {
-    status: false,
-  };
-  hide() {
-    coll: !this.state.coll;
-  }
   render() {
     return (
       <View style={styles.container}>
-        <View>
-          <TouchableOpacity
-            onPress={() => this.setState({ status: !this.state.status })}
-            style={{ width: 100, height: 100, backgroundColor: "red" }}
-          ></TouchableOpacity>
-        </View>
-        <Collapsible collapsed={this.state.status}>
-          <Text>Hai</Text>
-        </Collapsible>
+        <Text style={styles.welcome}>Welcome to React Native!</Text>
+        <Text style={styles.instructions}>To get started, edit App.js</Text>
+        <Text style={styles.instructions}>{instructions}</Text>
+        <RNCamera
+          ref={(ref) => {
+            this.camera = ref;
+          }}
+          style={{
+            flex: 1,
+            width: "100%",
+          }}
+        ></RNCamera>
       </View>
     );
   }

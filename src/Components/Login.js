@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import { Component } from "react";
 
-import { Card } from "react-native-elements";
 class Login extends Component {
   onButtonPress = () => {
     if (this.state.userName == "") {
