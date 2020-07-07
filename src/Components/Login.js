@@ -7,8 +7,26 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Component } from "react";
+import AntIcons from "react-native-vector-icons/AntDesign";
+import MatIcon from "react-native-vector-icons/MaterialIcons";
 
 class Login extends Component {
+  state = {
+    userId: "",
+    userName: "",
+    password: "",
+    data: "",
+    DeviceIMEI: "",
+  };
+  // getDeviceIMEI = () => {
+  //   const IMEI = require("react-native-imei");
+  //   IMEI.getImei().then((imeiList) => {
+  //     console.log(imeiList); // prints ["AABBBBBBCCCCCCD"]
+  //   });
+
+  //   return alert(this.state.DeviceIMEI);
+  // };
+
   onButtonPress = () => {
     if (this.state.userName == "") {
       return alert("User Name shoule Not be empty");
@@ -17,21 +35,14 @@ class Login extends Component {
       return alert("Password shoule Not be empty");
     }
 
-    this.props.navigation.navigate("HomeScreen");
-  };
-  state = {
-    userId: "",
-    userName: "",
-    password: "",
-    data: "",
-  };
-  onButtonPress = () => {
     fetch(
       global.HttpLink +
         "Master/ExsistingUser?UserName=" +
         this.state.userName +
         "&PassWord=" +
-        this.state.password,
+        this.state.password +
+        "&IMEINo1=1" +
+        "&IMEINo2=1",
       {
         method: "POST",
       }
@@ -47,6 +58,7 @@ class Login extends Component {
           });
           this.props.navigation.navigate("HomeScreen");
         } else {
+          // this.props.navigation.navigate("HomeScreen");
           return alert(this.state.data.message);
         }
       })
@@ -62,21 +74,45 @@ class Login extends Component {
             <Text style={styles.headertext}>Sign In</Text>
           </View>
           <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              placeholder="UserName..."
-              placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ userName: text })}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <AntIcons
+                name="user"
+                onPress={() => {
+                  this.onItemScanClick(item[1], item[2]);
+                }}
+                style={{
+                  color: "gray",
+                }}
+                size={25}
+              />
+              <TextInput
+                style={styles.inputText}
+                placeholder="UserName..."
+                placeholderTextColor="#003f5c"
+                onChangeText={(text) => this.setState({ userName: text })}
+              />
+            </View>
           </View>
           <View style={styles.inputView}>
-            <TextInput
-              style={styles.inputText}
-              secureTextEntry={true}
-              placeholder="Password..."
-              placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ password: text })}
-            />
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <MatIcon
+                name="lock-outline"
+                onPress={() => {
+                  this.onItemScanClick(item[1], item[2]);
+                }}
+                style={{
+                  color: "gray",
+                }}
+                size={25}
+              />
+              <TextInput
+                style={styles.inputText}
+                secureTextEntry={true}
+                placeholder="Password..."
+                placeholderTextColor="#003f5c"
+                onChangeText={(text) => this.setState({ password: text })}
+              />
+            </View>
           </View>
           <TouchableOpacity>
             <Text style={styles.forgot}>Forgot Password?</Text>

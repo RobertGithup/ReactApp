@@ -10,9 +10,13 @@ import {
   CheckBox,
   KeyboardAvoidingView,
   Switch,
+  FlatList,
 } from "react-native";
 import { Component } from "react";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
+import MatIcons from "react-native-vector-icons/MaterialIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import StickyHeaderFooterScrollView from "react-native-sticky-header-footer-scroll-view";
 
 const { height, width } = Dimensions.get("window");
 
@@ -30,13 +34,55 @@ class UserCreation extends Component {
     userId: "",
     userName: "",
     password: "",
-    warehouse: "",
-    IMEINo1: "",
-    IMEINo2: "",
+    branch: "",
+    iMEINo1: "",
+    iMEINo2: "",
     PO: "",
     ST: "",
     Lock: "",
     data: "",
+    user: [],
+
+    option: "",
+  };
+
+  componentDidMount = () => {
+    fetch(global.HttpLink + "Master/GetAllUser", {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          data: responseJson,
+        });
+
+        this.state.data.map((item) => {
+          this.setState((state) => {
+            state.user.push([
+              this.state.user.length + 1,
+              item.userName,
+              item.PassWord,
+              item.WareHouse,
+              item.IMEINO1,
+              item.IMEINO2,
+              item.PO,
+              item.ST,
+              item.Lock,
+            ]);
+          });
+        });
+        this.setState({
+          user: this.state.user,
+        });
+        //   return alert(JSON.stringify(this.state.user));
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
   onCancelPress = () => {
     this.setState({
@@ -49,8 +95,8 @@ class UserCreation extends Component {
       userName: "",
       password: "",
       warehouse: "",
-      IMEINo1: "",
-      IMEINo2: "",
+      iMEINo1: "",
+      iMEINo2: "",
       PO: "",
       ST: "",
       Lock: "",
@@ -65,8 +111,8 @@ class UserCreation extends Component {
         userName: this.state.userName,
         PassWord: this.state.password,
         warehouse: this.state.warehouse,
-        IMEINo1: this.state.IMEINo1,
-        IMEINo2: this.state.IMEINo2,
+        IMEINo1: this.state.iMEINo1,
+        IMEINo2: this.state.iMEINo2,
         PO: this.state.PO,
         ST: this.state.ST,
         Lock: this.state.Lock,
@@ -84,8 +130,54 @@ class UserCreation extends Component {
         if (this.state.data.status == 0) {
           return alert(this.state.data.message);
         } else {
+          this.setState({
+            userName: "",
+            password: "",
+            iMEINo1: "",
+            iMEINo2: "",
+            branch: "",
+          });
           return alert("User Created Successfully");
-          this.state = UserCreation.initialState;
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+  onUpdatePress = () => {
+    fetch(global.HttpLink + "Master/Updateuser", {
+      method: "POST",
+      body: JSON.stringify({
+        userName: this.state.userName,
+        PassWord: this.state.password,
+        warehouse: this.state.warehouse,
+        IMEINo1: this.state.iMEINo1,
+        IMEINo2: this.state.iMEINo2,
+        PO: this.state.PO,
+        ST: this.state.ST,
+        Lock: this.state.Lock,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          data: responseJson,
+        });
+        if (this.state.data.status == 0) {
+          return alert(this.state.data.message);
+        } else {
+          this.setState({
+            userName: "",
+            password: "",
+            iMEINo1: "",
+            iMEINo2: "",
+            branch: "",
+          });
+          return alert("User Updated Successfully");
         }
       })
       .catch((error) => {
@@ -137,68 +229,142 @@ class UserCreation extends Component {
       }));
     }
   };
-  selectUser = () => {
-    fetch(
-      global.HttpLink + "Master/GetUserProfile?UserId=" + this.state.userName,
-      {
-        method: "GET",
-      }
-    )
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          data: responseJson,
-        });
-
-        if (this.state.data.userName == "") {
-          return alert("UserName Not Found");
-        } else {
-          this.setState({
-            userName: this.state.data.userName,
-            password: this.state.data.PassWord,
-            warehouse: this.state.data.WareHouse,
-            IMEINo1: this.state.data.IMEINO1,
-            IMEINo2: this.state.data.IMEINO2,
-            isStOn: true,
-          });
-          if (this.state.data.ST == "Y") {
-            this.setState((state) => ({
-              isStOn: true,
-            }));
-          } else {
-            this.setState((state) => ({
-              isStOn: false,
-            }));
-          }
-
-          if (this.state.data.PO == "Y") {
-            this.setState((state) => ({
-              isPoOn: true,
-            }));
-          } else {
-            this.setState((state) => ({
-              isPoOn: true,
-            }));
-          }
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+  onUserAddClick = () => {
+    this.setState({
+      userName: "",
+      password: "",
+      iMEINo1: "",
+      iMEINo2: "",
+      branch: "",
+      option: "Add",
+    });
   };
+  onUserUpdateClick = (item) => {
+    //  return alert(item[4]);
+    this.setState({
+      userName: item[1],
+      password: item[2],
+      branch: item[3],
+      iMEINo1: item[4],
+      iMEINo2: item[5],
+      isPoOn: false,
+      isStOn: false,
+      isUserOn: false,
+      option: "Update",
+    });
+    if (item[6] == "Y") {
+      this.setState({ isPoOn: true });
+    }
+    if (item[7] == "Y") {
+      this.setState({ isStOn: true });
+    }
+    if (item[8] == "Y") {
+      this.setState({ isUserOn: true });
+    }
+  };
+  onUserBackClick = () => {
+    this.setState({ option: "" });
+  };
+  renderFlatList() {
+    return (
+      <View>
+        <MatIcons
+          name="add-circle-outline"
+          onPress={() => {
+            this.onUserAddClick();
+          }}
+          style={{
+            marginLeft: 20,
+            marginTop: 5,
+            color: "black",
+          }}
+          size={40}
+        />
+        <FlatList
+          scrollEnabled={true}
+          data={this.state.user}
+          extraData={this.state}
+          keyExtractor={(item) => item[0]}
+          renderItem={({ item }) => (
+            <View style={styles.flatlistContainer}>
+              <View style={{ flexDirection: "row" }}>
+                <View>
+                  <Text style={styles.flatlisttext}>{item[1]}</Text>
+                </View>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    justifyContent: "flex-end",
+                    flex: 1,
+                  }}
+                >
+                  <MatIcons
+                    name="edit"
+                    onPress={() => {
+                      this.onUserUpdateClick(item);
+                    }}
+                    style={{
+                      marginRight: 20,
+                      marginTop: 5,
+                    }}
+                    size={25}
+                  />
+                </View>
+              </View>
+
+              <View style={{ marginLeft: 20 }}>
+                <Text> {item[3]}</Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
+    );
+  }
+
   render() {
     return (
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => this.onMenuPress()}>
-            <MaterialCommunityIcons
-              name="menu"
-              size={35}
-              style={{ paddingLeft: 10, color: "white" }}
-            />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>User Creation</Text>
+      <StickyHeaderFooterScrollView
+        makeScrollable={true}
+        renderStickyHeader={() => (
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => this.onMenuPress()}>
+              <MaterialCommunityIcons
+                name="menu"
+                size={35}
+                style={{ paddingLeft: 10, color: "white" }}
+              />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>USER</Text>
+          </View>
+        )}
+        renderStickyFooter={() => <View></View>}
+      >
+        <View style={styles.bodycontainer}>
+          {this.state.option == "" && <View>{this.renderFlatList()}</View>}
+          {this.state.option == "Add" && <View>{this.renderUseradd()}</View>}
+          {this.state.option == "Update" && (
+            <View>{this.renderUserupdate()}</View>
+          )}
         </View>
+      </StickyHeaderFooterScrollView>
+    );
+  }
+  renderUseradd() {
+    return (
+      <View>
+        <AntDesign
+          name="left"
+          onPress={() => {
+            this.onUserBackClick();
+          }}
+          style={{
+            marginLeft: 20,
+            marginTop: 5,
+            color: "black",
+          }}
+          size={30}
+        />
         <View style={styles.bodycontainer}>
           <View style={styles.inputView}>
             <TextInput
@@ -224,7 +390,7 @@ class UserCreation extends Component {
               style={styles.inputText}
               placeholder="Branch"
               placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ warehouse: text })}
+              onChangeText={(text) => this.setState({ branch: text })}
               value={this.state.warehouse}
             />
           </View>
@@ -233,8 +399,8 @@ class UserCreation extends Component {
               style={styles.inputText}
               placeholder="IMEI No1"
               placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ IMEINo1: text })}
-              value={this.state.IMEINo1}
+              onChangeText={(text) => this.setState({ iMEINo1: text })}
+              value={this.state.iMEINo1}
             />
           </View>
           <View style={styles.inputView}>
@@ -242,8 +408,8 @@ class UserCreation extends Component {
               style={styles.inputText}
               placeholder="IMEI No2"
               placeholderTextColor="#003f5c"
-              onChangeText={(text) => this.setState({ IMEINo2: text })}
-              value={this.state.IMEINo2}
+              onChangeText={(text) => this.setState({ iMEINo2: text })}
+              value={this.state.iMEINo2}
             />
           </View>
         </View>
@@ -292,6 +458,125 @@ class UserCreation extends Component {
             onPress={this.onButtonPress}
           >
             <Text style={styles.loginText}>Create</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={this.onCancelPress}
+          >
+            <Text style={styles.loginText}>Cancel</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    );
+  }
+  renderUserupdate() {
+    return (
+      <View>
+        <AntDesign
+          name="left"
+          onPress={() => {
+            this.onUserBackClick();
+          }}
+          style={{
+            marginLeft: 20,
+            marginTop: 5,
+            color: "black",
+          }}
+          size={30}
+        />
+        <View style={styles.bodycontainer}>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="UserName"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => this.setState({ userName: text })}
+              onSubmitEditing={() => this.selectUser()}
+              value={this.state.userName}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Password"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => this.setState({ password: text })}
+              value={this.state.password}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="Branch"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => this.setState({ branch: text })}
+              value={this.state.branch}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="IMEI No1"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => this.setState({ iMEINo1: text })}
+              value={this.state.iMEINo1}
+            />
+          </View>
+          <View style={styles.inputView}>
+            <TextInput
+              style={styles.inputText}
+              placeholder="IMEI No2"
+              placeholderTextColor="#003f5c"
+              onChangeText={(text) => this.setState({ iMEINo2: text })}
+              value={this.state.iMEINo2}
+            />
+          </View>
+        </View>
+        <View style={styles.checkboxRowContainer}>
+          <View style={styles.checkboxContainer}>
+            <Switch
+              value={this.state.isPoOn}
+              onValueChange={this._onPOSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbColor="#861F41"
+            />
+            <Text style={styles.label}>PO</Text>
+          </View>
+          <View style={styles.checkboxContainer}>
+            <Switch
+              value={this.state.isStOn}
+              onValueChange={this._onSTSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbColor="#861F41"
+            />
+            <Text style={styles.label}>ST</Text>
+          </View>
+
+          <View style={styles.checkboxContainer}>
+            <Switch
+              value={this.state.isUserOn}
+              onValueChange={this._onUserSwitch}
+              trackColor={{
+                true: "#861F41",
+                false: "gray",
+              }}
+              thumbColor="#861F41"
+            />
+            <Text style={styles.label}>Lock User</Text>
+          </View>
+        </View>
+        <View style={styles.bottomcontainer}>
+          <TouchableOpacity
+            style={styles.loginBtn}
+            onPress={this.onUpdatePress}
+          >
+            <Text style={styles.loginText}>Update</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.loginBtn}
@@ -373,6 +658,21 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 10,
+  },
+  flatlistContainer: {
+    marginBottom: 5,
+    marginTop: 5,
+
+    flex: 1,
+    borderColor: "#A9A9A9",
+    borderBottomWidth: 1,
+  },
+  flatlisttext: {
+    marginTop: 5,
+    fontSize: 17,
+    marginLeft: 20,
+
+    color: "black",
   },
 });
 export default UserCreation;

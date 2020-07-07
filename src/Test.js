@@ -1,21 +1,28 @@
 import { RNCamera } from "react-native-camera";
+import React, { component } from "react";
+import { Component } from "react";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
+import FloatLabelTextInput from "react-native-floating-label-text-input";
 
 class Test extends Component {
+  barcodeRecognized = ({ barcodes }) => {
+    barcodes.forEach((barcode) => console.warn(barcode.data));
+  };
+  onBarCodeRead = (e) => {
+    return alert("Barcode value is" + e.data, "Barcode type is" + e.type);
+  };
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <Text style={styles.instructions}>{instructions}</Text>
-        <RNCamera
-          ref={(ref) => {
-            this.camera = ref;
-          }}
-          style={{
-            flex: 1,
-            width: "100%",
-          }}
-        ></RNCamera>
+        <View style={{ marginTop: 10, flex: 0.1 }}>
+          <FloatLabelTextInput placeholder="UserName" value="" />
+        </View>
       </View>
     );
   }
